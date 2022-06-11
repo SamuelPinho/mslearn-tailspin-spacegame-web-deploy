@@ -113,7 +113,7 @@ stages:
                 - task: AzureResourceGroupDeployment@2
                   displayName: "Deploy Azure Resource"
                   inputs:
-                    azureSubscription: "$(AzureSubscription)"
+                    azureSubscription: "Resource Manager - Tailspin - Space Game"
                     resourceGroupName: "tailspin-space-game-rg"
                     location: "$(AzureLocation)"
                     csmFile: "$(System.DefaultWorkingDirectory)/AppInsightsProvision/s/AppInsights/azuredeploy.json"
