@@ -103,6 +103,7 @@ stages:
       - deployment: Deploy
         pool:
           vmImage: "windows-2019"
+        environment: dev
         strategy:
           runOnce:
             deploy:
