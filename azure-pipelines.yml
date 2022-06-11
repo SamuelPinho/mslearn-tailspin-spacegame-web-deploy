@@ -86,7 +86,7 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy files to: $(Build.ArtifactStagingDirectory)"
             inputs:
-              SourceFolder: $(Build.SourceDirectory)
+              SourceFolder: "$(Build.SourceDirectory)"
               Contents: "AppInsights/*"
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
@@ -94,7 +94,7 @@ stages:
             displayName: "Publish build artifacts"
             inputs:
               PathtoPublish: "$(Build.ArtifactStagingDirectory)"
-              ArtifactName: AppInsightsProvision
+              ArtifactName: AppInsights
 
   - stage: "Deploy_App_Insights"
     displayName: "Deploy App Insights"
