@@ -90,11 +90,8 @@ stages:
               Contents: "**/AppInsights/*"
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish build artifacts"
-            inputs:
-              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
-              ArtifactName: AppInsightsProvision
+          - publish: "$(Build.ArtifactStagingDirectory)"
+            artifact: AppInsightsProvision
 
   - stage: "Deploy_App_Insights"
     displayName: "Deploy App Insights"
@@ -116,8 +113,8 @@ stages:
                     azureSubscription: "Resource Manager - Tailspin - Space Game"
                     resourceGroupName: "tailspin-space-game-rg"
                     location: "$(AzureLocation)"
-                    csmFile: "$(System.DefaultWorkingDirectory)/AppInsightsProvision/s/AppInsights/azuredeploy.json"
-                    csmParametersFile: "$(System.DefaultWorkingDirectory)/AppInsightsProvision/s/AppInsights/azuredeploy.parameters.qa.json"
+                    csmFile: "$(Pipeline.Workspace)/AppInsightsProvision/$(buildConfiguration)/azuredeploy.json"
+                    csmParametersFile: "$(Pipeline.Workspace)/AppInsightsProvision/$(buildConfiguration)/azuredeploy.parameters.qa.json"
 
   - stage: "Dev"
     displayName: "Deploy the dev environment"
