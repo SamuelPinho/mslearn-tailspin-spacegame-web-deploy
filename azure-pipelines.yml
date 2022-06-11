@@ -74,6 +74,28 @@ stages:
           - publish: "$(Build.ArtifactStagingDirectory)"
             artifact: drop
 
+  - stage: "Build App Insights"
+    displayName: "Build the app insights"
+    jobs:
+      - job: "BuildAppInsights"
+        displayName: "Build App Insights Job"
+        pool:
+          vmImage: "windows-2019"
+
+        steps:
+          - task: CopyFiles@2
+            displayName: "Copy files to: $(Build.ArtifactStagingDirectory)"
+            inputs:
+              SourceFolder: "$(agent.builddirectory)"
+              Contents: "**/AppInsights/*"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)"
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish build artifacts"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: AppInsightsProvision
+
   - stage: "Dev"
     displayName: "Deploy the dev environment"
     dependsOn: Build
