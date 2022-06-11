@@ -98,26 +98,19 @@ stages:
 
   - stage: "Deploy_App_Insights"
     displayName: "Deploy App Insights"
-    dependsOn: "Build_App_Insights"
     jobs:
-      - deployment: Deploy
-        pool:
-          vmImage: "windows-2019"
-        environment: dev
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - download: current
-                  artifact: AppInsightsProvision
-                - task: AzureResourceGroupDeployment@2
-                  displayName: "Deploy Azure Resource"
-                  inputs:
-                    azureSubscription: "Resource Manager - Tailspin - Space Game"
-                    resourceGroupName: "tailspin-space-game-rg"
-                    location: "$(AzureLocation)"
-                    csmFile: "$(Pipeline.Workspace)/AppInsightsProvision/$(buildConfiguration)/azuredeploy.json"
-                    csmParametersFile: "$(Pipeline.Workspace)/AppInsightsProvision/$(buildConfiguration)/azuredeploy.parameters.qa.json"
+      - job: app_insights_deploy
+        steps:
+          - task: AzureResourceGroupDeployment@2
+            displayName: "Deploy Azure Resource"
+            inputs:
+              azureSubscription: "Resource Manager - Tailspin - Space Game"
+              resourceGroupName: "tailspin-space-game-rg"
+              action: Create Or Update Resource Group
+              location: "$(AzureLocation)"
+              templateLocation: Linked artifact
+              csmFile: "$(System.DefaultWorkingDirectory)/AppInsights/azuredeploy.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/AppInsights/azuredeploy.parameters.qa.json"
 
   - stage: "Dev"
     displayName: "Deploy the dev environment"
