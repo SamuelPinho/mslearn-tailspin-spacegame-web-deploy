@@ -86,7 +86,7 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy files to: $(Build.ArtifactStagingDirectory)"
             inputs:
-              SourceFolder: "$(Build.SourceDirectory)"
+              SourceFolder: "$(agent.builddirectory)"
               Contents: "AppInsights/*"
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
