@@ -75,7 +75,7 @@ stages:
             artifact: drop
 
   - stage: "Build_App_Insights"
-    displayName: "Build the app insights"
+    displayName: "Build App Insights"
     jobs:
       - job: "BuildAppInsights"
         displayName: "Build App Insights Job"
@@ -95,6 +95,28 @@ stages:
             inputs:
               PathtoPublish: "$(Build.ArtifactStagingDirectory)"
               ArtifactName: AppInsightsProvision
+
+  - stage: "Deploy_App_Insights"
+    displayName: "Deploy App Insights"
+    dependsOn: "Build_App_Insights"
+    jobs:
+      - deployment: Deploy
+        pool:
+          vmImage: "windows-2019"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: AppInsightsProvision
+                - task: AzureResourceGroupDeployment@2
+                  displayName: "Deploy Azure Resource"
+                  inputs:
+                    azureSubscription: "$(AzureSubscription)"
+                    resourceGroupName: "tailspin-space-game-rg"
+                    location: "$(AzureLocation)"
+                    csmFile: "$(System.DefaultWorkingDirectory)/AppInsightsProvision/s/AppInsights/azuredeploy.json"
+                    csmParametersFile: "$(System.DefaultWorkingDirectory)/AppInsightsProvision/s/AppInsights/azuredeploy.parameters.qa.json"
 
   - stage: "Dev"
     displayName: "Deploy the dev environment"
