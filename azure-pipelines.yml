@@ -74,7 +74,7 @@ stages:
           - publish: "$(Build.ArtifactStagingDirectory)"
             artifact: drop
 
-  - stage: "Build App Insights"
+  - stage: "Build_App_Insights"
     displayName: "Build the app insights"
     jobs:
       - job: "BuildAppInsights"
